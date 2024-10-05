@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { IssueModal } from "./IssueModal";
 
@@ -49,12 +49,6 @@ export const IssueList = ({
   repoName: string;
   selectedRepoId: string;
 }) => {
-  const [pageState, setPageState] = useState({
-    first: 6,
-    after: null as string | null,
-    before: null as string | null,
-  });
-
   const [isModalOpen, setModalOpen] = useState(false);
 
   const { data, loading, fetchMore, refetch } = useQuery(
@@ -78,12 +72,6 @@ export const IssueList = ({
           before: null,
           last: null,
         },
-      }).then(() => {
-        setPageState({
-          first: 6,
-          after: data.repository.issues.pageInfo.endCursor,
-          before: null,
-        });
       });
     } else if (
       direction === "prev" &&
@@ -96,12 +84,6 @@ export const IssueList = ({
           after: null,
           first: null,
         },
-      }).then(() => {
-        setPageState({
-          first: null,
-          after: null,
-          before: data.repository.issues.pageInfo.startCursor,
-        });
       });
     }
   };
